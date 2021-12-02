@@ -15,12 +15,19 @@
       integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn"
       crossorigin="anonymous"
     />
+    <style>
+      body {
+        background-color: rgb(255, 255, 255);
+      }
+    </style>
 
     <title>Shopping Card Expo</title>
   </head>
   <body>
-    <nav class="navbar navbar-light bg-light">
-      <a class="navbar-brand">Shoppoholic</a>
+    <nav class="navbar navbar-dark bg-dark">
+      <a class="navbar-brand text-success font-italic font-weight-bolder"
+        >Shoppoholic</a
+      >
       <form class="form-inline">
         <input
           class="form-control mr-sm-2"
@@ -33,22 +40,73 @@
         </button>
       </form>
     </nav>
-    <div class="container">
-      <div class="row"></div>
+    <div class="container-fluid">
+      <div class="row">
+        <div id="for-ten" class="col-10 bg-success pt-5"></div>
+        <div id="for-two" class="col-2 bg-warning pt-5">
+          <h5 class="text-center">Your basket</h5>
+          <ol id="basketList">
+            <!-- <li></li> -->
+          </ol>
+        </div>
+      </div>
     </div>
 
     <!-- Optional JavaScript; choose one of the two! -->
     <script>
-      fetch("https:striveschool-api.herokuapp.com/books", {
-        method: "GET",
-        headers: {
-          Authorization: "DostonWhatElseToPut?Here",
-        },
-      })
-        .then((result) => result.json())
+      const bringThemHere = () => {
+        fetch("https:striveschool-api.herokuapp.com/books")
+          .then((result) => result.json())
+          .then((data) => {
+            console.log(data);
+            //
+            const row = document.getElementById("for-ten");
+            //
+            data.forEach((book) => {
+              const col = `<div class="col-6">
+                <img src=${book.img} class="card-img-top img-fluid w-75 h-75" alt="book">
+                <div class="card-body">
+                    <h5 class="card-title">${book.title}</h5>
+                    <p>£${book.price}</p>
+                    <p>${book.category}</p>
+                    <button onclick="bookToBasket(event)" class="btn btn-primary w-75">Add to Card</button>
+                    <button onclick="bookRemover(event)" class="btn btn-danger w-75">Skip >></button>
+                </div>
+                </div>`;
 
-        .catch((err) => {});
+              row.innerHTML += col;
+
+              //   const col = document.createElement("div");
+              //   col.classList.add("col-12", "col-md-4", "d-flex", "my-3");
+
+              //   const img = document.createElement("img");
+              //   img.src = book.img;
+              //   img.classList.add("img-fluid", "h-100", "w-100");
+              //   img.style.objectFit = "cover";
+
+              //   col.appendChild(img);
+              //   row.appendChild(col);
+            });
+          });
+      };
+      const bookRemover = (event) => {
+        event.target.parentElement.parentElement.style.display = "none";
+      };
+      const bookToBasket = () => {
+        // event.target.parentElement.parentElement.remove();
+        book.forEach((element) => {
+          const ol = document.getElementById("basketList");
+          const li = (document.createElement("li").innerHTML = "Hi");
+          ol.appendChild(li);
+        });
+      };
+
+      // .catch((err) => {});
+      window.onload = () => {
+        bringThemHere();
+      };
     </script>
+
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script
       src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
