@@ -17,7 +17,7 @@
     />
     <style>
       body {
-        background-color: rgb(255, 255, 255);
+        overflow: hidden;
       }
     </style>
 
@@ -42,10 +42,20 @@
     </nav>
     <div class="container-fluid">
       <div class="row">
-        <div id="for-ten" class="col-10 bg-success pt-5"></div>
-        <div id="for-two" class="col-2 bg-warning pt-5">
-          <h5 class="text-center">Your basket</h5>
-          <ol id="basketList">
+        <div
+          id="for-ten"
+          class="
+            col-9
+            d-flex
+            justify-content-around
+            align-center
+            bg-success
+            pt-5
+          "
+        ></div>
+        <div id="for-two" class="col-3 bg-warning pt-5">
+          <h5 class="text-center font-italic">Your basket</h5>
+          <ol id="basketList" class="d-flex">
             <!-- <li></li> -->
           </ol>
         </div>
@@ -54,55 +64,86 @@
 
     <!-- Optional JavaScript; choose one of the two! -->
     <script>
+      const queryResults = bookArray.filter((book) => {
+        book.title.includes(input);
+      });
+      let bookArray; //declare outsite of the function for global use then assign inside function
       const bringThemHere = () => {
         fetch("https:striveschool-api.herokuapp.com/books")
           .then((result) => result.json())
           .then((data) => {
             console.log(data);
-            //
+            bookArray = data;
             const row = document.getElementById("for-ten");
             //
             data.forEach((book) => {
-              const col = `<div class="col-6">
-                <img src=${book.img} class="card-img-top img-fluid w-75 h-75" alt="book">
+              const col = `
+        <div class="col-3">
+            <div class="card" >
+            <img src=${book.img} class="card-img-top img-fluid w-100 h-100" style="object-fit: cover" alt="#">
                 <div class="card-body">
                     <h5 class="card-title">${book.title}</h5>
                     <p>£${book.price}</p>
                     <p>${book.category}</p>
-                    <button onclick="bookToBasket(event)" class="btn btn-primary w-75">Add to Card</button>
-                    <button onclick="bookRemover(event)" class="btn btn-danger w-75">Skip >></button>
-                </div>
-                </div>`;
-
+                    <button id=${book.asin} onclick="addBookToBasket(event)" class="btn btn-primary w-100">Add to Card</button>
+                    <button onclick="removeCard(event)" class="btn btn-danger w-100">Skip >></button>
+                </div> </div> </div>
+                `;
               row.innerHTML += col;
-
               //   const col = document.createElement("div");
               //   col.classList.add("col-12", "col-md-4", "d-flex", "my-3");
-
               //   const img = document.createElement("img");
               //   img.src = book.img;
               //   img.classList.add("img-fluid", "h-100", "w-100");
               //   img.style.objectFit = "cover";
-
               //   col.appendChild(img);
               //   row.appendChild(col);
             });
           });
       };
-      const bookRemover = (event) => {
-        event.target.parentElement.parentElement.style.display = "none";
+      const removeCard = (event) => {
+        event.target.parentElement.parentElement.parentElement.parentElement.remove(); //need help here +++ when i skip, i
+        //need 3 parentElement but
+        // when i remove from basket i need 4 parenElement, please advice me thanks&regards
+        alert("Naughty Naughty");
       };
-      const bookToBasket = () => {
-        // event.target.parentElement.parentElement.remove();
-        book.forEach((element) => {
+      //const queryResults = bookArray.filter((book)=> {
+      // book.title.includes()
+      //})
+      //   const secondFilter = queryResults.filter() used anywhere u want to use
+
+      //.contains //and this is for ints when filtering
+      //.includes //< this is for strings
+
+      const addBookToBasket = (event) => {
+        const filteredBookArray = bookArray.filter(
+          (book) => book.asin === event.currentTarget.id
+        );
+        // .filter function goes through an array and returns a new array with the "true" elements
+        filteredBookArray.map((book) => {
           const ol = document.getElementById("basketList");
-          const li = (document.createElement("li").innerHTML = "Hi");
+          const li = document.createElement("li");
+          li.innerHTML = `<div class="col">
+            <div class="card" >
+            <img src=${book.img} class="card-img-top" alt="#">
+                <div class="card-body">
+
+                    <p>£${book.price}</p>
+                    <p>${book.category}</p>
+                    <button onclick="removeCard(event)" class="btn btn-danger w-100">Remove</button>
+                </div> </div> </div>`;
           ol.appendChild(li);
         });
       };
 
-      // .catch((err) => {});
+      //   .catch((err) => {
+      //       console.log(err)
+      //   });
+
       window.onload = () => {
+        alert("Do not Skip Cards");
+        alert("Promise ?");
+
         bringThemHere();
       };
     </script>
