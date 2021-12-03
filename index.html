@@ -17,11 +17,13 @@
     />
     <style>
       body {
+        background-color: #fff;
       }
     </style>
 
     <title>Shopping Card Expo</title>
   </head>
+
   <body>
     <nav class="navbar navbar-dark bg-dark">
       <a class="navbar-brand text-success font-italic font-weight-bolder"
@@ -49,14 +51,19 @@
           <h4 class="font-weight-bolder text-dark font-italic">
             - Available Books -
           </h4>
+          <div class="row mx-n1"></div>
         </div>
         <div id="for-two" class="col-4 bg-warning pt-5">
           <h4 class="font-weight-bolder text-dark font-italic">
             - Your basket -
           </h4>
-          <ol id="basketList" class="">
-            <!-- <li></li> -->
-          </ol>
+          <div id="basketList" class="row">
+            <div class="col-12">
+              <div class="alert alert-warning" role="alert">
+                Your Basket is Empty.
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -73,19 +80,21 @@
           .then((data) => {
             console.log(data);
             bookArray = data;
-            const row = document.getElementById("for-ten");
+            const row = document.querySelector("#for-ten .row");
             //
             data.forEach((book) => {
               const col = `
-        <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="col-sm-6 col-md-4 col-xl-3 px-1 mb-3" >
             <div class="card" >
             <img src=${book.img} class="card-img-top img-fluid h-50" style="object-fit: cover" alt="#">
                 <div class="card-body p-1">
                     <h6 class="card-title font-weight-bolder">${book.title}</h6>
                     <p>£${book.price}</p>
                     <p>${book.category}</p>
-                    <button id=${book.asin} onclick="addBookToBasket(event)" class="btn btn-primary w-100">Add to Card</button>
-                    <button onclick="removeCard(event)" class="btn btn-danger w-100">Skip >></button>
+                    <div class="d-flex mx-n1">
+                      <button id=${book.asin} onclick="addBookToBasket(event)" class="btn btn-sm btn-primary mx-1 w-100">Add to Card</button>
+                      <button onclick="removeCard(event)" class="btn btn-sm btn-danger mx-1 w-100">Skip >></button>
+                    </div>
                 </div> </div> </div>
                 `;
               row.innerHTML += col;
@@ -100,11 +109,37 @@
             });
           });
       };
+      const manageCartAlert = () => {
+        const basketList = document.getElementById("basketList");
+
+        const isAlertPresent = basketList.querySelector(".alert");
+
+        if (isAlertPresent) {
+          basketList.querySelector(".alert").closest(".col-12").remove();
+        } else {
+          // when the cart has already been filled up and initial alert previously removed
+          const isBasketEmpty = basketList.children.length === 0; //checking if there are no more nodes inside the cart
+
+          if (isBasketEmpty) {
+            const col = document.createElement("col-12");
+            col.className = "col-12";
+            col.innerHTML = `
+            <div class="alert alert-warning" role="alert">
+              Your Basket is Empty.
+            </div>`;
+            basketList.appendChild(col);
+          }
+        }
+      };
+
       const removeCard = (event) => {
-        event.target.parentElement.parentElement.parentElement.parentElement.remove(); //need help here +++ when i skip, i
+        // event.target.parentElement.parentElement.parentElement.parentElement.remove(); //need help here +++ when i skip, i
+        event.target.closest(".card").parentElement.remove();
         //need 3 parentElement but
         // when i remove from basket i need 4 parenElement, please advice me thanks&regards
         // alert("Naughty Naughty");
+
+        manageCartAlert();
       };
       //const queryResults = bookArray.filter((book)=> {
       // book.title.includes()
@@ -115,14 +150,17 @@
       //.includes //< this is for strings
 
       const addBookToBasket = (event) => {
+        manageCartAlert();
+
         const filteredBookArray = bookArray.filter(
           (book) => book.asin === event.currentTarget.id
         );
         // .filter function goes through an array and returns a new array with the "true" elements
         filteredBookArray.map((book) => {
-          const ol = document.getElementById("basketList");
-          const li = document.createElement("li");
-          li.innerHTML = `<div class="col">
+          const row = document.getElementById("basketList");
+          const col = document.createElement("div");
+          col.className = "col-12 mb-2";
+          col.innerHTML = `
             <div class="card" >
             <img src=${book.img} class="card-img-top" alt="#">
                 <div class="card-body">
@@ -130,8 +168,8 @@
                     <p>£${book.price}</p>
                     <p>${book.category}</p>
                     <button onclick="removeCard(event)" class="btn btn-danger w-100">Remove</button>
-                </div> </div> </div>`;
-          ol.appendChild(li);
+                </div> </div>`;
+          row.appendChild(col);
         });
       };
 
