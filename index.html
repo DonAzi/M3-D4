@@ -17,7 +17,6 @@
     />
     <style>
       body {
-        overflow: hidden;
       }
     </style>
 
@@ -35,27 +34,27 @@
           placeholder="Search"
           aria-label="Search"
         />
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+        <button
+          onclick="queryResults(event)"
+          class="btn btn-outline-success my-2 my-sm-0"
+          type="submit"
+        >
           Search
         </button>
       </form>
     </nav>
     <div class="container-fluid">
-      <div class="row">
-        <div
-          id="for-ten"
-          class="
-            col-9
-            d-flex
-            justify-content-around
-            align-center
-            bg-success
-            pt-5
-          "
-        ></div>
-        <div id="for-two" class="col-3 bg-warning pt-5">
-          <h5 class="text-center font-italic">Your basket</h5>
-          <ol id="basketList" class="d-flex">
+      <div class="row d-flex">
+        <div id="for-ten" class="col-8 d-inline-block bg-success pt-5">
+          <h4 class="font-weight-bolder text-dark font-italic">
+            - Available Books -
+          </h4>
+        </div>
+        <div id="for-two" class="col-4 bg-warning pt-5">
+          <h4 class="font-weight-bolder text-dark font-italic">
+            - Your basket -
+          </h4>
+          <ol id="basketList" class="">
             <!-- <li></li> -->
           </ol>
         </div>
@@ -64,9 +63,9 @@
 
     <!-- Optional JavaScript; choose one of the two! -->
     <script>
-      const queryResults = bookArray.filter((book) => {
-        book.title.includes(input);
-      });
+      //   const queryResults = bookArray.filter((book) => {
+      //     book.title.includes(input);
+      //   });
       let bookArray; //declare outsite of the function for global use then assign inside function
       const bringThemHere = () => {
         fetch("https:striveschool-api.herokuapp.com/books")
@@ -78,11 +77,11 @@
             //
             data.forEach((book) => {
               const col = `
-        <div class="col-3">
+        <div class="col-sm-6 col-md-4 col-lg-3">
             <div class="card" >
-            <img src=${book.img} class="card-img-top img-fluid w-100 h-100" style="object-fit: cover" alt="#">
-                <div class="card-body">
-                    <h5 class="card-title">${book.title}</h5>
+            <img src=${book.img} class="card-img-top img-fluid h-50" style="object-fit: cover" alt="#">
+                <div class="card-body p-1">
+                    <h6 class="card-title font-weight-bolder">${book.title}</h6>
                     <p>£${book.price}</p>
                     <p>${book.category}</p>
                     <button id=${book.asin} onclick="addBookToBasket(event)" class="btn btn-primary w-100">Add to Card</button>
@@ -105,7 +104,7 @@
         event.target.parentElement.parentElement.parentElement.parentElement.remove(); //need help here +++ when i skip, i
         //need 3 parentElement but
         // when i remove from basket i need 4 parenElement, please advice me thanks&regards
-        alert("Naughty Naughty");
+        // alert("Naughty Naughty");
       };
       //const queryResults = bookArray.filter((book)=> {
       // book.title.includes()
@@ -141,8 +140,8 @@
       //   });
 
       window.onload = () => {
-        alert("Do not Skip Cards");
-        alert("Promise ?");
+        // alert("Do not Skip Cards");
+        // alert("Promise ?");
 
         bringThemHere();
       };
