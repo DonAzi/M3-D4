@@ -31,13 +31,15 @@
       >
       <form class="form-inline">
         <input
+          id="inputValue"
+          onkeydown="searchQuery(event)"
           class="form-control mr-sm-2"
-          type="search"
+          type="text"
           placeholder="Search"
           aria-label="Search"
         />
         <button
-          onclick="queryResults(event)"
+          onclick="//queryResults(event)"
           class="btn btn-outline-success my-2 my-sm-0"
           type="submit"
         >
@@ -84,19 +86,19 @@
             //
             data.forEach((book) => {
               const col = `
-        <div class="col-sm-6 col-md-4 col-xl-3 px-1 mb-3" >
-            <div class="card" >
-            <img src=${book.img} class="card-img-top img-fluid h-50" style="object-fit: cover" alt="#">
-                <div class="card-body p-1">
-                    <h6 class="card-title font-weight-bolder">${book.title}</h6>
-                    <p>£${book.price}</p>
-                    <p>${book.category}</p>
-                    <div class="d-flex mx-n1">
-                      <button id=${book.asin} onclick="addBookToBasket(event)" class="btn btn-sm btn-primary mx-1 w-100">Add to Card</button>
-                      <button onclick="removeCard(event)" class="btn btn-sm btn-danger mx-1 w-100">Skip >></button>
-                    </div>
-                </div> </div> </div>
-                `;
+              <div class="col-sm-6 col-md-4 col-xl-3 px-1 mb-3" >
+                  <div class="card h-100" >
+                  <img src="${book.img}" class="card-img-top" style="height: 300px; object-fit:cover" alt="#">
+                      <div class="card-body p-1">
+                          <h6 class="card-title font-weight-bolder text-truncate">${book.title}</h6>
+                          <p>£${book.price}</p>
+                          <p>${book.category}</p>
+                          <div class="d-flex mx-n1">
+                            <button id=${book.asin} onclick="addBookToBasket(event)" class="btn btn-sm btn-primary mx-1 w-100">Add to Card</button>
+                            <button onclick="removeCard(event)" class="btn btn-sm btn-danger mx-1 w-100">Skip >></button>
+                          </div>
+                      </div> </div> </div>
+                      `;
               row.innerHTML += col;
               //   const col = document.createElement("div");
               //   col.classList.add("col-12", "col-md-4", "d-flex", "my-3");
@@ -124,9 +126,9 @@
             const col = document.createElement("col-12");
             col.className = "col-12";
             col.innerHTML = `
-            <div class="alert alert-warning" role="alert">
-              Your Basket is Empty.
-            </div>`;
+                  <div class="alert alert-warning" role="alert">
+                    Your Basket is Empty.
+                  </div>`;
             basketList.appendChild(col);
           }
         }
@@ -159,20 +161,55 @@
         filteredBookArray.map((book) => {
           const row = document.getElementById("basketList");
           const col = document.createElement("div");
-          col.className = "col-12 mb-2";
+          col.className = "col-sm-12 col-md-6 col-lg-4 mb-2";
           col.innerHTML = `
-            <div class="card" >
-            <img src=${book.img} class="card-img-top" alt="#">
-                <div class="card-body">
-
-                    <p>£${book.price}</p>
-                    <p>${book.category}</p>
-                    <button onclick="removeCard(event)" class="btn btn-danger w-100">Remove</button>
-                </div> </div>`;
+                  <div class="card " >
+                  <img src=${book.img} class="card-img-top" style="height:150px; object-fit: cover" alt="#">
+                      <div class="card-body">
+                          <p>£${book.price}</p>
+                          <p>${book.category}</p>
+                          <button onclick="removeCard(event)" class="btn btn-danger w-100">Remove</button>
+                      </div> </div>`;
           row.appendChild(col);
         });
       };
 
+      const searchQuery = (event) => {
+        // bringThemHere();
+        bookArray = data;
+        const row = document.getElementById("for-ten");
+        row.innerHTML = "";
+        let input = document.getElementById("inputValue");
+        let toUpperCase = input.value.toUpperCase();
+        for (let i = 0; i < bookArray.title.length; i++) {
+          let cartsContext =
+            bookArray.title[0].innerText || bookArray.title[0].textContext;
+          if (cartsContext.toUpperCase().indexOf(toUpperCase) > -1) {
+            let headache = (bookArray.title.style.display = "");
+            headache.addClass("col-4");
+            row.appendChild(headache);
+          } else {
+            return (bookArray.title.style.display = "none");
+          }
+        }
+      };
+
+      //       function myFunction() {        // I AM BEING THE EXAMPLE FOR THIS KID ARGH
+      //     var input, filter, ul, li, a, i, txtValue;
+      //     input = document.getElementById("myInput");
+      //     filter = input.value.toUpperCase();
+      //     ul = document.getElementById("myUL");
+      //     li = ul.getElementsByTagName("li");
+      //     for (i = 0; i < li.length; i++) {
+      //         a = li[i].getElementsByTagName("a")[0];
+      //         txtValue = a.textContent || a.innerText;
+      //         if (txtValue.toUpperCase().indexOf(filter) >-1) {
+      //             li[i].style.display = "";
+      //         } else {
+      //             li[i].style.display = "none";
+      //         }
+      //     }
+      // }
       //   .catch((err) => {
       //       console.log(err)
       //   });
