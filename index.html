@@ -80,8 +80,8 @@
         fetch("https:striveschool-api.herokuapp.com/books")
           .then((result) => result.json())
           .then((data) => {
-            console.log(data);
             bookArray = data;
+
             const row = document.querySelector("#for-ten .row");
             //
             data.forEach((book) => {
@@ -175,25 +175,26 @@
       };
 
       const searchQuery = (event) => {
-        // bringThemHere();
-        bookArray = data;
+        // console.log(
+        //   "ArraY OF BOOKS INSIDE search function",
+        //   bookArray
+        // );
         const row = document.getElementById("for-ten");
         row.innerHTML = "";
         let input = document.getElementById("inputValue");
         let toUpperCase = input.value.toUpperCase();
-        for (let i = 0; i < bookArray.title.length; i++) {
+        let mapedBooks = bookArray.map((book) => book.title);
+        console.log(mapedBooks);
+        for (let i = 0; i < mapedBooks.title.length; i++) {
           let cartsContext =
-            bookArray.title[0].innerText || bookArray.title[0].textContext;
+            mapedBooks.title[0].innerText || mapedBooks.title[0].textContext;
           if (cartsContext.toUpperCase().indexOf(toUpperCase) > -1) {
-            let headache = (bookArray.title.style.display = "");
-            headache.addClass("col-4");
-            row.appendChild(headache);
+            return manageCartAlert();
           } else {
-            return (bookArray.title.style.display = "none");
+            return (mapedBooks.title.style.display = "none");
           }
         }
       };
-
       //       function myFunction() {        // I AM BEING THE EXAMPLE FOR THIS KID ARGH
       //     var input, filter, ul, li, a, i, txtValue;
       //     input = document.getElementById("myInput");
