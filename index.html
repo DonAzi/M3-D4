@@ -78,9 +78,11 @@
       let bookArray; //declare outsite of the function for global use then assign inside function
       const searchQuery = (event) => {
         console.log("ArraY OF BOOKS INSIDE search function", bookArray);
-        bookArray.filter((books) =>
+        const filteredCards = bookArray.filter((books) =>
           books.title.toLowerCase().includes(event.target.value.toLowerCase())
         );
+        console.log("I am here for Filtered Cards", filteredCards);
+        bringThemHere(filteredCards); // I CANNOT SEE FILTERED CARDS, PLEASE HELP, MOST PROBABLY I CALLED WRONG FUNCTION INTO WRONG PLACE ?!
       };
       const bringThemHere = () => {
         fetch("https:striveschool-api.herokuapp.com/books")
